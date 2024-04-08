@@ -5,7 +5,8 @@ export const initialProfile = async()=>{
     const user = await currentUser();
 
     if(!user){
-        return redirectToSignIn();
+        const absoluteUrl = `${process.env.NEXT_PUBLIC_WEBSITE_URL}/sign-in`;
+        return redirectToSignIn({ returnBackUrl: absoluteUrl });
     }
 
     const profile = await db.profile.findUnique({
