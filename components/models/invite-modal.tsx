@@ -6,14 +6,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modal-store";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Check, Copy, RefreshCw } from "lucide-react";
 import { useOrigin } from "@/hooks/use-origin";
-import { use, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 const InviteModal = () => {
