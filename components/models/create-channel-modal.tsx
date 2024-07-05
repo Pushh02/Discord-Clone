@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/select";
 import { ChannelType } from "@prisma/client";
 import qs from "query-string";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   name: z
@@ -46,19 +47,28 @@ const formSchema = z.object({
 });
 
 const CreateChannelModal = () => {
-  const { isOpen, onClose, type } = useModal();
+  const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
   const params = useParams();
 
   const isModalOpen = isOpen && type === "createChannel";
+  const { channelType } = data;
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      type: ChannelType.TEXT,
+      type: channelType || ChannelType.TEXT,
     },
   });
+
+  useEffect(() => {
+    if(channelType){
+      form.setValue("type", channelType);
+    }else{
+      form.setValue("type", ChannelType.TEXT)
+    }
+  }, [channelType, form]);
 
   const isLoading = form.formState.isSubmitting;
 
@@ -66,10 +76,10 @@ const CreateChannelModal = () => {
     try {
       const url = qs.stringifyUrl({
         url: "/api/channels",
-        query:{
-          serverId: params?.serverId
-        }
-      })
+        query: {
+          serverId: params?.serverId,
+        },
+      });
       await axios.post(url, values);
 
       form.reset();
@@ -132,23 +142,22 @@ const CreateChannelModal = () => {
                       >
                         <FormControl>
                           <SelectTrigger className="bg-zinc-300/50 border-0 focus:ring-0 text-black ring-offset-0 focus:ring-offset-0 capitalize outline-none">
-                            <SelectValue placeholder="Select a channel type"/>
+                            <SelectValue placeholder="Select a channel type" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {Object.values(ChannelType).map((type)=>(
+                          {Object.values(ChannelType).map((type) => (
                             <SelectItem
-                            key={type}
-                            value={type}
-                            className="capitalize"
-                          >
-                            {type?.toLocaleLowerCase()}
-                          </SelectItem>
+                              key={type}
+                              value={type}
+                              className="capitalize"
+                            >
+                              {type?.toLocaleLowerCase()}
+                            </SelectItem>
                           ))}
-                          
                         </SelectContent>
                       </Select>
-                      <FormMessage/>
+                      <FormMessage />
                     </FormItem>
                   );
                 }}

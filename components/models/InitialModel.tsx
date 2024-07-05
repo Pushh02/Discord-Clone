@@ -52,7 +52,7 @@ const InitialModel = () => {
   });
 
   const isLoading = form.formState.isSubmitting;
-
+    //@ts-ignore
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try{
       await axios.post("/api/servers", values)
