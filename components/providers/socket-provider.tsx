@@ -6,7 +6,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { io as ClientIO } from "socket.io-client";
 import { socket } from "../../app/socket"
 
 type SocketContextType = {
@@ -48,7 +47,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
+    socket.on("disconnect",  onDisconnect);
 
     socket.on("connect", () => {
       setIsConnected(true);
