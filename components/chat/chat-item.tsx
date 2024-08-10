@@ -9,10 +9,11 @@ import { Form, FormControl, FormField, FormItem } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import * as z from "zod";
-import qs from "query-string"
+import qs from "query-string";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useModal } from "@/hooks/use-modal-store";
 
 interface ChatItemProps {
   id: string;
@@ -52,7 +53,7 @@ const ChatItem = ({
   socketQuery,
 }: ChatItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const { onOpen } = useModal();
 
   useEffect(() => {
     const handleKeyDown = (event: any) => {
@@ -76,18 +77,18 @@ const ChatItem = ({
   const isLoading = form.formState.isSubmitting;
 
   const onSumbit = async (values: z.infer<typeof formSchema>) => {
-    try{
-        const url = qs.stringifyUrl({
-            url: `${socketUrl}/message?messageId=${id}`,
-            query: socketQuery,
-        })
+    try {
+      const url = qs.stringifyUrl({
+        url: `${socketUrl}/message?messageId=${id}`,
+        query: socketQuery,
+      });
 
-        await axios.patch(url, values);
+      await axios.patch(url, values);
 
-        form.reset();
-        setIsEditing(false);
-    } catch(err){
-        console.log(err)
+      form.reset();
+      setIsEditing(false);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -219,7 +220,12 @@ const ChatItem = ({
             </ActionTooltip>
           )}
           <ActionTooltip label="Delete">
-            <Trash className="cursor-pointer ml-auto w-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition" />
+            <Trash
+            onClick={() => onOpen("deleteMessage", {
+              apiUrl: `${socketUrl}/message?messageId=${id}`,
+              query: socketQuery,
+            })}
+            className="cursor-pointer ml-auto w-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition" />
           </ActionTooltip>
         </div>
       )}

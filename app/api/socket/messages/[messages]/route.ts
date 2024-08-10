@@ -100,6 +100,7 @@ export async function DELETE(req: Request, res: Response) {
             }
         }
     })
+    return NextResponse.json({message});
 
   } catch (err) {
     console.log("[MESSAGE_ID]", err);
@@ -115,7 +116,6 @@ export async function PATCH(req: Request, res: Response) {
       const serverId = searchParams.get("serverId");
       const channelId = searchParams.get("channelId");
       const { content } = await req.json();
-      console.log(searchParams)
   
       if(!profile){
           return new NextResponse("Unautorized", { status: 401 });
