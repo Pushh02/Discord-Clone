@@ -67,7 +67,6 @@ export const useChatSocket = ({ addKey, updateKey, queryKey }: ChatSocketProps) 
                         ...newData[0].items,
                     }
                 };
-                console.log("i am woeking")
 
                 return {
                     ...oldData,

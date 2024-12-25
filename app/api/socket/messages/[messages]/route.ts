@@ -203,7 +203,7 @@ export async function PATCH(req: Request, res: Response) {
       })
 
       const updateKey = `chat:${channelId}:message:update`;
-
+      //@ts-ignore
       res?.socket?.server?.io?.emit(updateKey, message);
 
       return NextResponse.json({message}); 
